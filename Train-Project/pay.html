@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./pay.css">
+</head>
+<body>
+    
+   
+   <nav class="navbar">
+  <a href="index.html" class="logo">STEP RAILWAY</a>
+  <div class="navbar-right">
+    <button class="nav-btn" onclick="window.location.href='check.html'">ბილეთის შემოწმება/დაბრუნება</button>
+    <button class="nav-btn" id="authBtn" onclick="openAuthModal('login')">შესვლა/რეგისტრაცია</button>
+    <div class="profile-area" id="profileArea" onclick="toggleDropdown()">
+      <div class="profile-icon" id="profileInitials"></div>
+      <span class="profile-name" id="profileName"></span>
+      <div class="dropdown" id="dropdown">
+        <div class="dropdown-item">პროფილი</div>
+        <div class="dropdown-item">ჩემი ბილეთები</div>
+        <div class="dropdown-sep"></div>
+        <div class="dropdown-item danger" onclick="logout(event)">გასვლა</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">ავტორიზაცია</span>
+        <button class="close-btn" onclick="closeAuthModal()">✕</button>
+      </div>
+      <div class="tabs">
+        <div class="tab" id="tab-login" onclick="switchTab('login')">შესვლა</div>
+        <div class="tab" id="tab-register" onclick="switchTab('register')">რეგისტრაცია</div>
+      </div>
+      <div class="global-error" id="globalError"></div>
+
+      <!-- შესვლა -->
+      <div class="form-panel" id="panel-login">
+        <div class="form-group">
+          <label class="form-label">ელ. ფოსტა</label>
+          <input class="form-input" id="l-email" type="email" placeholder="giorgi@example.com" />
+          <div class="error-msg" id="err-l-email">ელ. ფოსტა სავალდებულოა</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლი</label>
+          <input class="form-input" id="l-pass" type="password" placeholder="შეიყვანეთ პაროლი" />
+          <div class="error-msg" id="err-l-pass">პაროლი სავალდებულოა</div>
+        </div>
+        <button class="submit-btn" onclick="handleLogin()">შესვლა</button>
+      </div>
+
+      <!-- რეგისტრაცია -->
+      <div class="form-panel" id="panel-register">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">სახელი</label>
+            <input class="form-input" id="r-fname" type="text" placeholder="გიორგი" />
+            <div class="error-msg" id="err-r-fname">სახელი სავალდებულოა</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">გვარი</label>
+            <input class="form-input" id="r-lname" type="text" placeholder="მამულაშვილი" />
+            <div class="error-msg" id="err-r-lname">გვარი სავალდებულოა</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ელ. ფოსტა</label>
+          <input class="form-input" id="r-email" type="email" placeholder="giorgi@example.com" />
+          <div class="error-msg" id="err-r-email">სწორი ელ. ფოსტა მიუთითეთ</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ტელეფონი</label>
+          <input class="form-input" id="r-phone" type="tel" placeholder="+995 5XX XXX XXX" />
+          <div class="error-msg" id="err-r-phone">ტელეფონი სავალდებულოა</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">მისამართი</label>
+          <input class="form-input" id="r-address" type="text" placeholder="თბილისი, რუსთაველის გამზ. 1" />
+          <div class="error-msg" id="err-r-address">მისამართი სავალდებულოა</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">საფოსტო კოდი</label>
+            <input class="form-input" id="r-zipcode" type="text" placeholder="0100" />
+            <div class="error-msg" id="err-r-zipcode">საფოსტო კოდი სავალდებულოა</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">სქესი</label>
+            <select class="form-input" id="r-gender">
+              <option value="MALE">მამრობითი</option>
+              <option value="FEMALE">მდედრობითი</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლი</label>
+          <input class="form-input" id="r-pass" type="password" placeholder="მინ. 8 სიმბოლო" />
+          <div class="error-msg" id="err-r-pass">მინიმუმ 8 სიმბოლო</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლის დადასტურება</label>
+          <input class="form-input" id="r-pass2" type="password" placeholder="გაიმეორეთ პაროლი" />
+          <div class="error-msg" id="err-r-pass2">პაროლები არ ემთხვევა</div>
+        </div>
+        <button class="submit-btn" onclick="handleRegister()">დარეგისტრირება</button>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="success-check">✓</div>
+        <div class="success-title" id="successTitle"></div>
+        <div class="success-sub" id="successSub"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+    <div class="payment-banner">
+        <h1>გადახდის გვერდი</h1>
+    </div>
+
+    <section class="payment-section">
+        <div class="payment-card">
+            <p class="total-price">სულ გადასახდელი: <span id="ticket-price">0.00₾</span></p>
+
+            <div class="payment-field">
+                <label>ბარათის ნომერი*</label>
+                <input type="text" id="card-number" placeholder="2456 1665 5155 5151" maxlength="16" required>
+            </div>
+
+            <div class="payment-row">
+                <div class="payment-field">
+                    <label>მოქმედების ვადა*</label>
+                    <input type="text" id="card-date" placeholder="MM/YY" maxlength="5"  required>
+                </div>
+                <div class="payment-field">
+                    <label>CVC / CVV</label>
+                    <input type="text" id="card-cvv" placeholder="***" maxlength="3" required>
+                </div>
+            </div>
+
+            <div class="payment-field">
+                <label>ბარათის მფლობელი</label>
+                <input type="text" id="card-name" placeholder="J. Smith" required>
+            </div>
+
+            <button class="pay-btn" onclick="confirmPayment()">გადახდა</button>
+        </div>
+    </section>
+
+    <script src="./pay.js"></script>
+</body>
+</html>

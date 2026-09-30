@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+   <nav class="navbar">
+  <a href="index.html" class="logo">STEP RAILWAY</a>
+  <div class="navbar-right">
+    <button class="nav-btn" onclick="window.location.href='check.html'">ბილეთის შემოწმება/დაბრუნება</button>
+    <button class="nav-btn" id="authBtn" onclick="openAuthModal('login')">შესვლა/რეგისტრაცია</button>
+    <div class="profile-area" id="profileArea" onclick="toggleDropdown()">
+      <div class="profile-icon" id="profileInitials"></div>
+      <span class="profile-name" id="profileName"></span>
+      <div class="dropdown" id="dropdown">
+        <div class="dropdown-item">პროფილი</div>
+        <div class="dropdown-item">ჩემი ბილეთები</div>
+        <div class="dropdown-sep"></div>
+        <div class="dropdown-item danger" onclick="logout(event)">გასვლა</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">ავტორიზაცია</span>
+        <button class="close-btn" onclick="closeAuthModal()">✕</button>
+      </div>
+      <div class="tabs">
+        <div class="tab" id="tab-login" onclick="switchTab('login')">შესვლა</div>
+        <div class="tab" id="tab-register" onclick="switchTab('register')">რეგისტრაცია</div>
+      </div>
+      <div class="global-error" id="globalError"></div>
+
+      <!-- შესვლა -->
+      <div class="form-panel" id="panel-login">
+        <div class="form-group">
+          <label class="form-label">ელ. ფოსტა</label>
+          <input class="form-input" id="l-email" type="email" placeholder="Temiko123@gmail.com" />
+          <div class="error-msg" id="err-l-email">ელ. ფოსტა სავალდებულოა</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლი</label>
+          <input class="form-input" id="l-pass" type="password" placeholder="შეიყვანეთ პაროლი" />
+          <div class="error-msg" id="err-l-pass">პაროლი სავალდებულოა</div>
+        </div>
+        <button class="submit-btn" onclick="handleLogin()">შესვლა</button>
+      </div>
+
+      <!-- რეგისტრაცია -->
+      <div class="form-panel" id="panel-register">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">სახელი</label>
+            <input class="form-input" id="r-fname" type="text" placeholder="temuriko" />
+            <div class="error-msg" id="err-r-fname">სახელი სავალდებულოა</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">გვარი</label>
+            <input class="form-input" id="r-lname" type="text" placeholder="koxreidze" />
+            <div class="error-msg" id="err-r-lname">გვარი სავალდებულოა</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ელ. ფოსტა</label>
+          <input class="form-input" id="r-email" type="email" placeholder="Temiko123@gmail.com" maxlength="22" />
+          <div class="error-msg" id="err-r-email">სწორი ელ. ფოსტა მიუთითეთ</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ტელეფონი</label>
+          <input class="form-input" id="r-phone" type="tel" placeholder="+995 557 656 614"  maxlength="20"/>
+          <div class="error-msg" id="err-r-phone">ტელეფონი სავალდებულოა</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">მისამართი</label>
+          <input class="form-input" id="r-address" type="text" placeholder="თბილისი, რუსთაველის გამზ. 1" />
+          <div class="error-msg" id="err-r-address">მისამართი სავალდებულოა</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">საფოსტო კოდი</label>
+            <input class="form-input" id="r-zipcode" type="text" placeholder="0100" maxlength="4"/>
+            <div class="error-msg" id="err-r-zipcode">საფოსტო კოდი სავალდებულოა</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">სქესი</label>
+            <select class="form-input" id="r-gender">
+              <option value="MALE">ვაჟბატონი</option>
+              <option value="FEMALE">ქალბატონი</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლი</label>
+          <input class="form-input" id="r-pass" type="password" placeholder="მინ. 8 სიმბოლო" maxlength="12" minlength="8"/>
+          <div class="error-msg" id="err-r-pass">მინიმუმ 8 სიმბოლო </div> 
+        </div>
+        <div class="form-group">
+          <label class="form-label">პაროლის დადასტურება</label>
+          <input class="form-input" id="r-pass2" type="password" placeholder="გაიმეორეთ პაროლი" maxlength="12" minlength="8" />
+          <div class="error-msg" id="err-r-pass2">პაროლები არ ემთხვევა</div>
+        </div>
+        <button class="submit-btn" onclick="handleRegister()">დარეგისტრირება</button>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="success-check">✓</div>
+        <div class="success-title" id="successTitle"></div>
+        <div class="success-sub" id="successSub"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+ 
+    <section class="hero">
+        <div class="hero-text">
+            <h1>შეიძინეთ მატარებლის ბილეთები ონლაინ</h1>
+            <p>გისურვებთ ბედნიერ მგზავრობას</p>
+        </div>
+ 
+        <div class="search-box">
+            <p class="search-title">დაჯავშნეთ მატარებლის ბილეთი</p>
+            <div class="search-fields">
+                <select id="from-select">
+                    <option value="">საიდან</option>
+                </select>
+ 
+                <select id="to-select">
+                    <option value="">სად</option>
+                </select>
+ 
+                <input type="date" id="date-input" placeholder="გამგზავრების თარიღი" min="">
+ 
+                <input type="number" id="passengers-input" placeholder="მგზავრების რაოდენობა" min="1">
+ 
+                <button id="search-btn" onclick="searchTrains()">მატარებლის<br>მოძებნა</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-image">
+            <img src="https://railway.stepprojects.ge/assets/img/train/trainticket.png" alt="travel">
+        </div>
+        <div class="features-content">
+            <h2>მატარებლის ბილეთები</h2>
+            <p>რკინიგზის ბილეთის შესაძენად თქვენ დაგჭირდებათ თითოეული მგზავრის პირადი ნომერი. გთხოვთ მოამზადოთ ეს ინფორმაცია წინასწარ.</p>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon-box"><img src="https://railway.stepprojects.ge/assets/img/train/unoffer.png" alt="photo"></div>
+                    <span>შეუფლოდავი შეთავაზებები</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><img src="https://railway.stepprojects.ge/assets/img/train/suppor24.png" alt="photo"></div>
+                    <span>24X7 მხარდაჭერა</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><img src="https://railway.stepprojects.ge/assets/img/train/secure100.png" alt="photo"></div>
+                    <span>100% უსაფრთხო</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><img src="https://railway.stepprojects.ge/assets/img/train/truspay.png" alt="photo"></div>
+                    <span>100% უსაფრთხო გადახდა</span>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+
+    <section class="results-section">
+        <div id="results-area"></div>
+    </section>
+ 
+<script src="./app.js"></script>
+</body>
+</html>p
